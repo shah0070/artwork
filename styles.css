@@ -1,0 +1,262 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 100vw;
+}
+
+/* Top Toolbar */
+.top-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar-left, .toolbar-right {
+    display: flex;
+    gap: 10px;
+}
+
+.toolbar-center h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.tool-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tool-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tool-btn.active {
+    background: #007AFF;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}
+
+/* Drawing Board */
+.drawing-board {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.drawing-board canvas {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    cursor: crosshair;
+}
+
+/* Bottom Toolbar */
+.bottom-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tool Section */
+.tool-section {
+    display: flex;
+    gap: 12px;
+}
+
+/* Size Control */
+.size-control {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.size-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #333;
+    transition: all 0.2s ease;
+}
+
+#size-slider {
+    width: 120px;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+#size-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007AFF;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 122, 255, 0.3);
+}
+
+#size-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007AFF;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 122, 255, 0.3);
+}
+
+/* Color Palette */
+.color-palette {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.color-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.color-option.active {
+    border-color: #007AFF;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
+}
+
+.custom-color {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+.custom-color input[type="color"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .toolbar-center h1 {
+        font-size: 20px;
+    }
+    
+    .bottom-toolbar {
+        flex-direction: column;
+        gap: 20px;
+        padding: 15px;
+    }
+    
+    .tool-section {
+        order: 1;
+    }
+    
+    .size-control {
+        order: 2;
+        padding: 0;
+    }
+    
+    .color-palette {
+        order: 3;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .drawing-board {
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .tool-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+    }
+    
+    .color-option {
+        width: 35px;
+        height: 35px;
+    }
+    
+    #size-slider {
+        width: 100px;
+    }
+}
+
+/* Additional animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeIn 0.5s ease-out;
+}
