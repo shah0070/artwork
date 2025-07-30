@@ -9,37 +9,60 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     height: 100vh;
     overflow: hidden;
+    position: fixed;
+    width: 100%;
 }
 
 .container {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    max-width: 100vw;
+    width: 100%;
+    position: relative;
 }
 
-/* Top Toolbar */
+/* Top Toolbar - Better Alignment */
 .top-toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding: 12px 20px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-height: 64px;
 }
 
 .toolbar-left, .toolbar-right {
     display: flex;
     gap: 10px;
+    align-items: center;
+    flex: 1;
+}
+
+.toolbar-left {
+    justify-content: flex-start;
+}
+
+.toolbar-right {
+    justify-content: flex-end;
+}
+
+.toolbar-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .toolbar-center h1 {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     color: #333;
     margin: 0;
+    text-align: center;
 }
 
 .tool-btn {
@@ -47,7 +70,7 @@ body {
     height: 44px;
     border: none;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
     color: #333;
     cursor: pointer;
     display: flex;
@@ -60,7 +83,7 @@ body {
 
 .tool-btn:hover {
     background: rgba(255, 255, 255, 1);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -70,121 +93,277 @@ body {
     box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
 }
 
-/* Drawing Board */
+/* Drawing Board - Centered and Responsive */
 .drawing-board {
     flex: 1;
     padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .drawing-board canvas {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: calc(100% - 40px);
+    max-height: calc(100% - 40px);
+    width: 100%;
+    height: 100%;
     border-radius: 16px;
     background: #ffffff;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     cursor: crosshair;
+    touch-action: none;
 }
 
-/* Bottom Toolbar */
-.bottom-toolbar {
+/* Floating Button - Perfectly Centered */
+.floating-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    z-index: 1001;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.floating-btn:hover {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.5);
+}
+
+.floating-btn.active {
+    transform: translateX(-50%) rotate(45deg);
+    background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1002;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Expandable Toolbar - Better Layout */
+.expandable-toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    width: 90%;
+    max-width: 420px;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+    z-index: 1003;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
 }
 
-/* Tool Section */
-.tool-section {
-    display: flex;
-    gap: 12px;
+.expandable-toolbar.active {
+    transform: translateX(-50%) translateY(0);
 }
 
-/* Size Control */
-.size-control {
+.toolbar-content {
+    padding: 30px 24px 40px;
+    height: 100%;
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+/* Close Button - Better Positioning */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    color: #666;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 0 20px;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+/* Tool Section - Improved Layout */
+.tool-section {
+    margin-bottom: 30px;
+}
+
+.tool-section h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 16px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    justify-items: center;
+}
+
+.tools-grid .tool-btn {
+    width: 54px;
+    height: 54px;
+    font-size: 20px;
+}
+
+/* Size Control - Better Alignment */
+.size-control {
+    margin-bottom: 30px;
+}
+
+.size-control h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.size-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: space-between;
 }
 
 .size-indicator {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: #333;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 #size-slider {
-    width: 120px;
-    height: 6px;
-    border-radius: 3px;
-    background: #ddd;
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: #e0e0e0;
     outline: none;
     -webkit-appearance: none;
+    margin: 0 8px;
 }
 
 #size-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: #007AFF;
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0, 122, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+    transition: all 0.2s ease;
+}
+
+#size-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
 }
 
 #size-slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: #007AFF;
     cursor: pointer;
     border: none;
-    box-shadow: 0 2px 6px rgba(0, 122, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
 }
 
-/* Color Palette */
+.size-value {
+    font-size: 14px;
+    color: #666;
+    min-width: 45px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Color Palette - Perfect Grid Alignment */
 .color-palette {
-    display: flex;
-    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.color-palette h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.colors-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    justify-items: center;
     align-items: center;
 }
 
 .color-option {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     cursor: pointer;
     border: 3px solid transparent;
     transition: all 0.2s ease;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .color-option:hover {
     transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .color-option.active {
     border-color: #007AFF;
-    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+    transform: scale(1.05);
 }
 
 .custom-color {
     background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     color: white;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .custom-color input[type="color"] {
@@ -196,67 +375,175 @@ body {
     border-radius: 50%;
 }
 
-/* Responsive Design */
+/* Mobile Responsiveness - Better Breakpoints */
 @media screen and (max-width: 768px) {
+    .top-toolbar {
+        padding: 10px 16px;
+        min-height: 56px;
+    }
+    
     .toolbar-center h1 {
-        font-size: 20px;
+        font-size: 18px;
     }
     
-    .bottom-toolbar {
-        flex-direction: column;
-        gap: 20px;
-        padding: 15px;
-    }
-    
-    .tool-section {
-        order: 1;
-    }
-    
-    .size-control {
-        order: 2;
-        padding: 0;
-    }
-    
-    .color-palette {
-        order: 3;
-        justify-content: center;
-        flex-wrap: wrap;
+    .tool-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
     }
     
     .drawing-board {
-        padding: 10px;
+        padding: 16px;
+    }
+    
+    .floating-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 22px;
+        bottom: 24px;
+    }
+    
+    .expandable-toolbar {
+        width: 95%;
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .toolbar-content {
+        padding: 24px 20px 32px;
+    }
+    
+    .tools-grid {
+        gap: 12px;
+    }
+    
+    .tools-grid .tool-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+    }
+    
+    .colors-grid {
+        gap: 12px;
+    }
+    
+    .color-option {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .size-controls {
+        gap: 12px;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .tool-btn {
-        width: 38px;
-        height: 38px;
+    .top-toolbar {
+        padding: 8px 12px;
+        min-height: 52px;
+    }
+    
+    .toolbar-center h1 {
         font-size: 16px;
     }
     
-    .color-option {
-        width: 35px;
-        height: 35px;
+    .tool-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
     }
     
-    #size-slider {
-        width: 100px;
+    .floating-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 20px;
+        bottom: 20px;
+    }
+    
+    .toolbar-content {
+        padding: 20px 16px 28px;
+    }
+    
+    .tools-grid {
+        gap: 10px;
+    }
+    
+    .tools-grid .tool-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 16px;
+    }
+    
+    .colors-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+    
+    .color-option {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .tool-section h3,
+    .size-control h3,
+    .color-palette h3 {
+        font-size: 16px;
+        margin-bottom: 12px;
     }
 }
 
-/* Additional animations */
-@keyframes fadeIn {
-    from {
+/* Animation Improvements */
+@keyframes expandFromCenter {
+    0% {
+        transform: translateX(-50%) translateY(100%) scale(0.3);
         opacity: 0;
-        transform: translateY(20px);
     }
-    to {
+    50% {
+        transform: translateX(-50%) translateY(20%) scale(0.9);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateX(-50%) translateY(0) scale(1);
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
-.container {
-    animation: fadeIn 0.5s ease-out;
+@keyframes collapseToCenter {
+    0% {
+        transform: translateX(-50%) translateY(0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translateX(-50%) translateY(20%) scale(0.9);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateX(-50%) translateY(100%) scale(0.3);
+        opacity: 0;
+    }
+}
+
+.expandable-toolbar.expanding {
+    animation: expandFromCenter 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.expandable-toolbar.collapsing {
+    animation: collapseToCenter 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Additional Visual Improvements */
+.toolbar-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.toolbar-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.toolbar-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+}
+
+.toolbar-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
 }
